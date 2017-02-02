@@ -140,15 +140,15 @@ class Boovel(bpy.types.Panel):
         row = layout.row()#use this also for a new line
         row.label("Bools:")
         row = layout.row()
-        row.operator("boovel.unionbool")#add a operatorclass for costum functions
+        row.operator("boovel.unionbool", icon = "MOD_BOOLEAN")#add a operatorclass for costum functions
         row = layout.row()
-        row.operator("boovel.intersectbool")
+        row.operator("boovel.intersectbool", icon = "MOD_BOOLEAN")
         row = layout.row()
-        row.operator("boovel.differencebool")
+        row.operator("boovel.differencebool", icon = "MOD_BOOLEAN")
         row = layout.row()
         row.label("Beveltools:")
         row = layout.row()
-        row.operator("boovel.bevelinit")
+        row.operator("boovel.bevelinit", icon ="MOD_BEVEL")
         row = layout.row()
         row.prop(bpy.context.active_object.modifiers['Bevel'], "width")
         row = layout.row()
@@ -165,12 +165,12 @@ class Boovel(bpy.types.Panel):
 
         row.operator("boovel.maxweight")
         row = layout.row()
-        row.operator("boovel.selectsharp")
+        row.operator("boovel.selectsharp", icon = 'SNAP_EDGE')
 
         row = layout.row()
         row.label('Rest of the Schützenfest')
         row = layout.row()
-        row.operator("boovel.symmetrize")
+        row.operator("boovel.symmetrize", icon = "ARROW_LEFTRIGHT")
         row = layout.row()
         #row.label(str(bpy.context.active_object.weightAngle))
 
