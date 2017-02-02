@@ -5,6 +5,14 @@ bl_info = {
 }
 import bpy
 
+bpy.types.Object.weightAngle = bpy.props.FloatProperty(
+    name = "Weihgt Angle",
+    default = 1,
+    max = 1.0,
+    min = -1.0,
+    description = "set bevel weight",
+)
+
 def add_bevel_modifier():
     bpy.ops.object.modifier_add(type='BEVEL')
     bpy.context.object.modifiers["Bevel"].width = 0.03
@@ -41,6 +49,7 @@ class Unionbool(bpy.types.Operator):
     def execute(self, context):
         #code here
         fastbool(booltype = 'UNION')
+        print("bool unite")
         return{'FINISHED'}
     
 class Intersectbool(bpy.types.Operator):
@@ -79,6 +88,18 @@ class ZeroWeight(bpy.types.Operator):
     def execute(self, context):
         bpy.ops.transform.edge_bevelweight(value=-1)
         return{'FINISHED'}
+
+class CostumWeight(bpy.types.Operator):
+    #dont forget to register this class;)
+    bl_idname = "bovel.customweigt"
+    bl_label = "set weights by Angle"
+    value = bpy.props.FloatProperty()
+    def execute(self, context):
+        #code here
+        print(self.value)
+        bpy.ops.transform.edge_bevelweight(value = self.value)
+        return{'FINISHED'} 
+
 class MaxWeight(bpy.types.Operator):
     #dont forget to register this class;)
     bl_idname = "boovel.maxweight"
@@ -111,6 +132,7 @@ class Boovel(bpy.types.Panel):
     bl_label = "Boovel 0.01"
     bl_space_type = "VIEW_3D"
     bl_region_type = "TOOLS"
+    bl_category = "Boovel"
     #bl_context = "object"
  
     def draw(self, context):
@@ -132,13 +154,26 @@ class Boovel(bpy.types.Panel):
         row = layout.row()
         row.prop(bpy.context.active_object.modifiers['Bevel'], "segments")
         row = layout.row()
+        row.label("Bevel Weights:")
+        row = layout.row()
         row.operator("boovel.zeroweight")
+        layout.prop(bpy.context.active_object, "weightAngle", slider = True)
+        
+        #how to get these fucking values?!??!?!?1
+        row.operator("bovel.customweigt", text = "set by:").value = bpy.context.active_object.weightAngle
+        #btn.value = 0.2
+
         row.operator("boovel.maxweight")
+        row = layout.row()
+        row.operator("boovel.selectsharp")
+
+        row = layout.row()
+        row.label('Rest of the Schützenfest')
         row = layout.row()
         row.operator("boovel.symmetrize")
         row = layout.row()
-        row.operator("boovel.selectsharp")
-        
+        #row.label(str(bpy.context.active_object.weightAngle))
+
 def register():
     bpy.utils.register_class(Boovel)
     bpy.utils.register_class(Unionbool)
@@ -149,6 +184,7 @@ def register():
     bpy.utils.register_class(MaxWeight)
     bpy.utils.register_class(Symmetrize)
     bpy.utils.register_class(SelectSharp)
+    bpy.utils.register_class(CostumWeight)
 
 def unregister():
     bpy.utils.unregister_class(Boovel)
@@ -160,6 +196,7 @@ def unregister():
     bpy.utils.unregister_class(MaxWeight)
     bpy.utils.unregister_class(Symmetrize)
     bpy.utils.unregister_class(SelectSharp)
+    bpy.utils.unregister_class(CostumWeight)
 
 if __name__ == '__main__':
     register()
